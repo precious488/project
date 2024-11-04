@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -82,7 +84,7 @@
         </ul>
     </div>
     <div class="show">
-        <form action="" method="post">
+        <form action="logic.php" method="post">
             <div>
                 <label for="">what is the name of the certificate</label>
                 <input type="text" name="edu_title">
@@ -96,6 +98,8 @@
                 <input type="date" name="time">
             </div>
             <button type="submit" name="add_education">add to cv</button>
+            <button type="submit" name=""><a href="certificate.php">continue</a></button>
+
         </form>
     </div>
 </body>

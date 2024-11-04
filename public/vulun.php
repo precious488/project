@@ -83,7 +83,7 @@
     </div>
     <div class="show">
         
-        <form action="" method="post">
+        <form action="logic.php" method="post">
             <div>
                 <label for="">what was your role at the organisation</label>
                 <input type="text" name="vulun_role">
@@ -102,9 +102,11 @@
             </div>
             <div>
                 <label for="">what dis you do at the organisation</label>
-                <textarea name="vulu_description" id=""></textarea>
+                <textarea name="vulun_description" id=""></textarea>
             </div>
             <button type="submit" name="add_vulun">add to cv</button>
+            <button type="submit" name=""><a href="skills.php">continue</a></button>
+
         </form>
     </div>
 </body>

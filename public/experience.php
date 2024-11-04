@@ -1,3 +1,20 @@
+<?php
+// if (isset($_POST['add_experience'])) { // Fixed 'experince' to 'experience'
+//         $role = htmlspecialchars($_POST['role']);
+//         $company_name = htmlspecialchars($_POST['company_name']);
+//         $company_location = htmlspecialchars($_POST['company_location']);
+//         $experience_description = htmlspecialchars($_POST['experience_description']); // Fixed variable name
+
+//         $sql = "INSERT INTO experience (role, company_name, company_location, experience_description, cv_id) 
+//                 VALUES ('$role', '$company_name', '$company_location', '$experience_description', '$_SESSION[cv_id]')";
+//         $result = mysqli_query($conn, $sql);
+
+        
+       
+//     }
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -83,7 +100,7 @@
     </div><div class="show">
         <h1>how are you bvgjs</h1>
         
-        <form action="" method="post">
+        <form action="logic.php" method="post">
             <div>
                 <label for="">what was your role at the company</label>
                 <input type="text" name="role">
@@ -104,7 +121,9 @@
                 <label for="">what did you do at the company</label>
                 <textarea name="experince_description" id=""></textarea>
             </div>
-            <button type="submit" name="add_experince">add to cv</button>
+            <button type="submit" name="add_experience">add to cv</button>
+            <button type="submit" name=""><a href="projects.php">continue</a></button>
+
         </form>
     </div>
 </body>

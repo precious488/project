@@ -83,12 +83,14 @@
     </div>
     <div class="show">
         
-        <form action="" method="post">
+        <form action="logic.php" method="post">
             <div>
                 <label for="">Enter the skills you posses</label>
                 <textarea name="skill" id=""></textarea>
             </div>
-            <button type="submit" name="skill_skill">add to cv</button>
+            <button type="submit" name="add_skill">add to cv</button>
+            <button type="submit" name=""><a href="summarry.php">continue</a></button>
+
         </form>
     </div>
 </body>

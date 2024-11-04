@@ -101,7 +101,7 @@
             
         </h1>
 
-        <form action="" method="post">
+        <form action="logic.php" method="post">
             <div>
                 <label for="language">language</label>
                     <input type="text" name="lang">
@@ -119,6 +119,8 @@
                 </select>
             </div>
             <button type="submit" name="add_lang">add to cv</button>
+            <button type="submit" name=""><a href="../templates\template1.php">next</a></button>
+          
         </form>
     </div>
 

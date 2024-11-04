@@ -82,24 +82,26 @@
         </ul>
     </div>
     <div class="show">
-    <form action="" method="post">
+    <form action="logic.php" method="post">
         <div>
             <label for="">what is the name of your certification</label>
             <input type="text" name="certificate_name">
         </div>
         <div>
             <label for="">where did you get your certification</label>
-            <input type="text" name="certificate_organisatio">
+            <input type="text" name="certificate_organisation">
         </div>
         <div>
             <label for="">when did you obtain your certification</label>
-            <input type="text" name="cerificate_time">
+            <input type="date" name="certificate_date">
         </div>
         <div>
-            <label for="">Howis certificate important</label>
+            <label for="">How is certificate important</label>
             <textarea name="certificate_importance" id=""></textarea>
         </div>
         <button type="submit" name="add_certificate">add to cv</button>
+        <button type="submit" name=""><a href="vulun.php">continue</a></button>
+
     </form>
 </div>
 </body>

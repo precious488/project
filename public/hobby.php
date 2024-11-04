@@ -84,12 +84,14 @@
     </div>
     <div class="show">
         
-        <form action="" method="post">
+        <form action="logic.php" method="post">
             <div>
                 <label for="">Enter your hobbby</label>
-                <input type="text" name="add_hob">
+                <input type="text" name="hob">
             </div>
             <button type="submit" name="add_hob">add to cv</button>
+            <button type="submit" name=""><a href="language.php">continue</a></button>
+
         </form>
     </div>
 </body>

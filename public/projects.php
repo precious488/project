@@ -83,7 +83,7 @@
     </div>
     <div class="show">
         
-        <form action="" method="post">
+        <form action="logic.php" method="post">
             <div>
                 <label for="">what is the title of the project you worked on?</label>
                 <input type="text" name="title">
@@ -101,6 +101,8 @@
                 <textarea name="project_description" id=""></textarea>
             </div>
             <button type="submit" name="add_project">add to cv</button>
+        <button type="submit" name=""><a href="education.php">continue</a></button>
+
         </form>
     </div>
 </body>

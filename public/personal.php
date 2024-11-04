@@ -87,6 +87,8 @@ session_start();
     </div>
     <div class="show">
         <div class="p">
+        
+
             <h1>How do you want employers to contact you?</h1>
            
         </div>
@@ -111,7 +113,10 @@ session_start();
         </div>
 
         <div>
-            <button type="submit" name="add_p"> add to cv</button>
+        <button type="submit" name=""><a href="experience.php">continue</a></button>
+        <button type="submit" name="add_p"><a href="experince.php"></a>add to cv</button>
+            
+
         </div>
         
         </form>

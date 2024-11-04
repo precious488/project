@@ -159,23 +159,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['add_certificate'])) {
         $certificate_name = htmlspecialchars($_POST['certificate_name']);
         $certificate_organisation = htmlspecialchars($_POST['certificate_organisation']);
-        $certificate_time = htmlspecialchars($_POST['certificate_time']);
+        $certificate_time = htmlspecialchars($_POST['certificate_date']);
         $certificate_importance = htmlspecialchars($_POST['certificate_importance']);
 
-        $sql = "INSERT INTO certifications (certificate_name, certificate_organisation, certificate_time, certificate_importance) 
-                VALUES ('$certificate_name', '$certificate_organisation', '$certificate_time', '$certificate_importance')";
+        $sql = "INSERT INTO certifications (certification_name, certification_organisation, certification_date, certification_importance, cv_id) 
+                VALUES ('$certificate_name', '$certificate_organisation', '$certificate_time', '$certificate_importance', '$_SESSION[cv_id]')";
         executeQuery($conn, $sql);
+        header("location:certificate.php");
+        exit();
     }
 
     if (isset($_POST['add_experience'])) { // Fixed 'experince' to 'experience'
         $role = htmlspecialchars($_POST['role']);
         $company_name = htmlspecialchars($_POST['company_name']);
         $company_location = htmlspecialchars($_POST['company_location']);
-        $experience_description = htmlspecialchars($_POST['experience_description']); // Fixed variable name
+        $experience_description = htmlspecialchars($_POST['experince_description']); // Fixed variable name
 
-        $sql = "INSERT INTO experience (role, company_name, company_location, experience_description) 
-                VALUES ('$role', '$company_name', '$company_location', '$experience_description')";
+        $sql = "INSERT INTO experience (role_company, company_name, company_location, experience_description, cv_id) 
+                VALUES ('$role', '$company_name', '$company_location', '$experience_description', '$_SESSION[cv_id]')";
         executeQuery($conn, $sql);
+        header("location:experience.php");
+       
     }
 
     if (isset($_POST['add_education'])) {
@@ -183,9 +187,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $institution = htmlspecialchars($_POST['institution']);
         $time = htmlspecialchars($_POST['time']);
 
-        $sql = "INSERT INTO education (title, institution, year) 
-                VALUES ('$edu_title', '$institution', '$time')";
+        $sql = "INSERT INTO education (title, institution, date, cv_id) 
+                VALUES ('$edu_title', '$institution', '$time', '$_SESSION[cv_id]')";
         executeQuery($conn, $sql);
+        header("location:education.php");
+        exit();
     }
 
     if (isset($_POST['add_p'])) { // Changed 'add_p' to 'add_info' for clarity
@@ -194,12 +200,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $number = htmlspecialchars($_POST['number']);
         $country = htmlspecialchars($_POST['country']);
 
-        $sql = "INSERT INTO info (full_name, email, phone, country) 
-                VALUES ('$name', '$email', '$number', '$country')";
+        $sql = "INSERT INTO info (full_name, email, phone, country, cv_id) 
+                VALUES ('$name', '$email', '$number', '$country', '$_SESSION[cv_id]')";
         executeQuery($conn, $sql);
-            // header("location:personal.php");
-            // exit()
-        // }
+            header("location:personal.php");
+          
+        }
     }
 
     if (isset($_POST['add_project'])) {
@@ -208,37 +214,70 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $project_duration = htmlspecialchars($_POST['project_duration']);
         $project_description = htmlspecialchars($_POST['project_description']);
 
-        $sql = "INSERT INTO projects (project_title, organisation, project_duration, project_description) 
-                VALUES ('$title', '$organisation', '$project_duration', '$project_description')";
+        $sql = "INSERT INTO projects (project_title, organisation, project_duration, project_description, cv_id) 
+                VALUES ('$title', '$organisation', '$project_duration', '$project_description', '$_SESSION[cv_id]')";
         executeQuery($conn, $sql);
+        header("location:projects.php");
+     
     }
 
     if (isset($_POST['add_skill'])) {
         $skill = htmlspecialchars($_POST['skill']);
 
-        $sql = "INSERT INTO skills (skill_name) 
-                VALUES ('$skill')";
+        $sql = "INSERT INTO skills (skills, cv_id) 
+                VALUES ('$skill', '$_SESSION[cv_id]')";
         executeQuery($conn, $sql);
+        header("location:skills.php");
+        exit();
     }
 
     if (isset($_POST['add_sum'])) { // Changed 'add_sum' to 'add_summary' for clarity
         $summary = htmlspecialchars($_POST['summary']);
 
-        $sql = "INSERT INTO summaries (summary_text) 
-                VALUES ('$summary')";
+        $sql = "INSERT INTO summarry (summ, cv_id) 
+                VALUES ('$summary', '$_SESSION[cv_id]')";
         executeQuery($conn, $sql);
+        header("location:summarry.php");
+        exit();
     }
 
-    if (isset($_POST['add_volun'])) { // Changed 'add_vulun' to 'add_volunteering'
-        $volun_role = htmlspecialchars($_POST['volun_role']);
+    if (isset($_POST['add_vulun'])) { // Changed 'add_vulun' to 'add_volunteering'
+        $volun_role = htmlspecialchars($_POST['vulun_role']);
         $organisation_name = htmlspecialchars($_POST['organisation_name']);
-        $volun_duration = htmlspecialchars($_POST['volun_duration']);
-        $volun_location = htmlspecialchars($_POST['volun_location']);
-        $volun_description = htmlspecialchars($_POST['volun_description']);
+        $volun_duration = htmlspecialchars($_POST['vulun_duration']);
+        $volun_location = htmlspecialchars($_POST['vulun_location']);
+        $volun_description = htmlspecialchars($_POST['vulun_description']);
 
-        $sql = "INSERT INTO volunteering (role, organisation, duration, location, description) 
-                VALUES ('$volun_role', '$organisation_name', '$volun_duration', '$volun_location', '$volun_description')";
+        $sql = "INSERT INTO vuluntering (role, vulun_organisation, duration, vulun_lacation, vulun_description, cv_id) 
+                VALUES ('$volun_role', '$organisation_name', '$volun_duration', '$volun_location', '$volun_description', '$_SESSION[cv_id]')";
         executeQuery($conn, $sql);
+         header("location:vulun.php");
+        exit();
+    }
+
+
+    if(isset($_POST['add_lang'])){
+        $lang = htmlspecialchars($_POST['lang']);
+        $level = $_POST['level'];
+
+        $sql = "INSERT INTO language(lang, level, cv_id)
+                VALUES ('$lang', '$level', '$_SESSION[cv_id]')";
+     executeQuery($conn, $sql);
+     header("location:language.php");
+    exit();
+    }
+
+
+  
+    if(isset($_POST['add_hob'])){
+        $hob = htmlspecialchars($_POST['hob']);
+         $sql= "INSERT INTO hobbies(hobby, cv_id)
+                 VALUES ('$hob', '$_SESSION[cv_id]')";
+              executeQuery($conn, $sql);
+              header("location:hobby.php");
+             exit();
+    
+
     }
 
     if (isset($_POST['submit'])) {
@@ -256,6 +295,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             echo "Passwords do not match.";
         }
+
+
+
     }
-}
+
+
+
+// }
 

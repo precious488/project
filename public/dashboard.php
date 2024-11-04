@@ -1,3 +1,29 @@
+<?php 
+include '../config/config.php';
+session_start();
+
+if(isset($_POST['create_cv'])){
+    $title = htmlspecialchars($_POST['title']);
+    $date = htmlspecialchars($_POST['date']);
+
+    $id = rand(1, 10000);
+    $_SESSION['cv_id']=$id;
+
+    $sql = "INSERT INTO cvs (cv_id, cv_title, created_at, user_id)
+           VALUES ('$id', '$title', '$date', '$_SESSION[id]') ";
+    $result = mysqli_query($conn, $sql);
+    if(!$result){
+        echo "errer" . mysqli_error($conn);
+    }else{
+        header("location: personal.php");
+    }
+
+
+}
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +33,7 @@
     <link rel="stylesheet" href="css\all.min.css">
     <link rel="stylesheet" href="css\fontawesome.min.css">
     <link rel="stylesheet" href="cv.css">
-
+    <script scr="app.js" defer></script>
 </head>
 <body>
    
@@ -80,5 +106,48 @@
             
         </ul>
     </div>
+
+
+<div class="create">
+<div class="logo">
+  
+    <p>MY CV</p>
+  </div>  
+
+  
+  <nav class="nav-links">
+    <ul>
+        <li><a href="#">feedback</a></li>
+       <li><a href="">logout</a></li> 
+        
+    </ul>
+  </nav>
+
+  
+</div>
+
+<div class="c">
+    <div class="createCv">
+    <form action="" method="post" class="title">
+        
+        <div>
+            <label for="Title">Title</label>
+            <input type="text" name="title" placeholder="Enter your title">
+        </div>
+        <div>
+            <label for="date">Date</label>
+            <input type="date" name="date" placeholder="Date">
+        </div>
+            
+        <div>
+            <button type="submit" name="create_cv">create cv</button>
+        </div>
+        
+        </form>
+</div>
+</div>
+
+
+
 </body>
 </html>

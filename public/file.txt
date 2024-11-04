@@ -1,0 +1,500 @@
+To allow users to create multiple CVs and link them to the relevant data, we can introduce a **CVs Table**. This table will serve as a central point for each CV created by a user and will reference the various sections (certifications, education, experience, etc.) through foreign keys. Here's how you can model it:
+
+### Updated Database Schema with CVs Table
+
+1. **Users Table**
+   - `user_id` (Primary Key, Auto Increment)
+   - `full_name` (VARCHAR)
+   - `email` (VARCHAR, UNIQUE)
+   - `phone_number` (VARCHAR)
+   - `country` (VARCHAR)
+
+2. **CVs Table**
+   - `cv_id` (Primary Key, Auto Increment)
+   - `user_id` (Foreign Key)
+   - `cv_title` (VARCHAR)  // e.g., "Software Engineer CV"
+   - `created_at` (DATETIME)
+   - `updated_at` (DATETIME)
+
+3. **Certifications Table**
+   - `certification_id` (Primary Key, Auto Increment)
+   - `cv_id` (Foreign Key)
+   - `certificate_name` (VARCHAR)
+   - `institution` (VARCHAR)
+   - `date_obtained` (DATE)
+   - `importance_level` (ENUM: 'Low', 'Medium', 'High')
+
+4. **Education Table**
+   - `education_id` (Primary Key, Auto Increment)
+   - `cv_id` (Foreign Key)
+   - `degree_title` (VARCHAR)
+   - `institution` (VARCHAR)
+   - `graduation_year` (YEAR)
+
+5. **Experiences Table**
+   - `experience_id` (Primary Key, Auto Increment)
+   - `cv_id` (Foreign Key)
+   - `company_name` (VARCHAR)
+   - `duration` (VARCHAR)  // e.g., "2 years"
+   - `location` (VARCHAR)
+   - `job_description` (TEXT)
+
+6. **Projects Table**
+   - `project_id` (Primary Key, Auto Increment)
+   - `cv_id` (Foreign Key)
+   - `project_title` (VARCHAR)
+   - `organization` (VARCHAR)
+   - `project_duration` (VARCHAR)  // e.g., "6 months"
+   - `project_description` (TEXT)
+
+7. **Volunteer Experiences Table**
+   - `volunteering_id` (Primary Key, Auto Increment)
+   - `cv_id` (Foreign Key)
+   - `role` (VARCHAR)
+   - `organization` (VARCHAR)
+   - `duration` (VARCHAR)  // e.g., "1 year"
+   - `location` (VARCHAR)
+   - `volunteer_description` (TEXT)
+
+8. **Skills Table**
+   - `skill_id` (Primary Key, Auto Increment)
+   - `cv_id` (Foreign Key)
+   - `skill_name` (VARCHAR)
+
+9. **Summaries Table**
+   - `summary_id` (Primary Key, Auto Increment)
+   - `cv_id` (Foreign Key)
+   - `professional_summary` (TEXT)
+
+10. **Languages Table**
+    - `language_id` (Primary Key, Auto Increment)
+    - `cv_id` (Foreign Key)
+    - `language` (VARCHAR)
+    - `proficiency` (ENUM: 'Beginner', 'Intermediate', 'Advanced')
+
+11. **Hobbies Table**
+    - `hobby_id` (Primary Key, Auto Increment)
+    - `cv_id` (Foreign Key)
+    - `hobby_name` (VARCHAR)
+
+### Relationships
+- **One-to-Many**: Each user can create multiple CVs, and each CV can have multiple entries in certifications, education, experience, projects, volunteering, skills, languages, and hobbies.
+
+### Notes
+- The `CVs` table provides a clear way to organize multiple CVs for each user, allowing them to customize their professional profiles as needed.
+- Including `created_at` and `updated_at` fields helps track changes to the CVs over time.
+- Ensure that foreign keys (like `cv_id`) are indexed for efficient querying and retrieval.
+
+This structure allows for flexibility and organization, enabling users to manage multiple CVs seamlessly. Let me know if you have any further modifications or additional features in mind!
+
+
+
+
+Certainly! Below is a PHP script that retrieves information about a particular CV from all relevant tables and displays it on a webpage. This example assumes you have the CV ID available (e.g., passed as a query parameter).
+
+### PHP Code to Select and Display CV Information
+
+```php
+<?php
+include 'db.php';
+
+// Check if cv_id is provided
+if (isset($_GET['cv_id'])) {
+    $cv_id = $_GET['cv_id'];
+
+    try {
+        // Fetch CV details
+        $stmt = $pdo->prepare("SELECT * FROM cvs WHERE cv_id = ?");
+        $stmt->execute([$cv_id]);
+        $cv = $stmt->fetch();
+
+        if ($cv) {
+            echo "<h1>CV Title: " . htmlspecialchars($cv['cv_title']) . "</h1>";
+            echo "<h2>Created At: " . htmlspecialchars($cv['created_at']) . "</h2>";
+            echo "<h2>Updated At: " . htmlspecialchars($cv['updated_at']) . "</h2>";
+
+            // Fetch User Info
+            $userStmt = $pdo->prepare("SELECT * FROM users WHERE user_id = ?");
+            $userStmt->execute([$cv['user_id']]);
+            $user = $userStmt->fetch();
+
+            if ($user) {
+                echo "<h3>User Information</h3>";
+                echo "<p>Name: " . htmlspecialchars($user['full_name']) . "</p>";
+                echo "<p>Email: " . htmlspecialchars($user['email']) . "</p>";
+                echo "<p>Phone: " . htmlspecialchars($user['phone_number']) . "</p>";
+                echo "<p>Country: " . htmlspecialchars($user['country']) . "</p>";
+            }
+
+            // Fetch Certifications
+            echo "<h3>Certifications</h3>";
+            $certStmt = $pdo->prepare("SELECT * FROM certifications WHERE cv_id = ?");
+            $certStmt->execute([$cv_id]);
+            $certifications = $certStmt->fetchAll();
+
+            if ($certifications) {
+                foreach ($certifications as $cert) {
+                    echo "<p>" . htmlspecialchars($cert['certificate_name']) . " from " . htmlspecialchars($cert['institution']) . " (Obtained on: " . htmlspecialchars($cert['date_obtained']) . ")</p>";
+                }
+            } else {
+                echo "<p>No certifications found.</p>";
+            }
+
+            // Fetch Education
+            echo "<h3>Education</h3>";
+            $eduStmt = $pdo->prepare("SELECT * FROM education WHERE cv_id = ?");
+            $eduStmt->execute([$cv_id]);
+            $educations = $eduStmt->fetchAll();
+
+            if ($educations) {
+                foreach ($educations as $edu) {
+                    echo "<p>" . htmlspecialchars($edu['degree_title']) . " from " . htmlspecialchars($edu['institution']) . " (Graduated in: " . htmlspecialchars($edu['graduation_year']) . ")</p>";
+                }
+            } else {
+                echo "<p>No education records found.</p>";
+            }
+
+            // Fetch Experiences
+            echo "<h3>Work Experience</h3>";
+            $expStmt = $pdo->prepare("SELECT * FROM experiences WHERE cv_id = ?");
+            $expStmt->execute([$cv_id]);
+            $experiences = $expStmt->fetchAll();
+
+            if ($experiences) {
+                foreach ($experiences as $exp) {
+                    echo "<p>" . htmlspecialchars($exp['company_name']) . " (" . htmlspecialchars($exp['duration']) . ") - " . htmlspecialchars($exp['location']) . ": " . htmlspecialchars($exp['job_description']) . "</p>";
+                }
+            } else {
+                echo "<p>No work experience found.</p>";
+            }
+
+            // Fetch Projects
+            echo "<h3>Projects</h3>";
+            $projStmt = $pdo->prepare("SELECT * FROM projects WHERE cv_id = ?");
+            $projStmt->execute([$cv_id]);
+            $projects = $projStmt->fetchAll();
+
+            if ($projects) {
+                foreach ($projects as $proj) {
+                    echo "<p>" . htmlspecialchars($proj['project_title']) . " at " . htmlspecialchars($proj['organization']) . " (" . htmlspecialchars($proj['project_duration']) . "): " . htmlspecialchars($proj['project_description']) . "</p>";
+                }
+            } else {
+                echo "<p>No projects found.</p>";
+            }
+
+            // Fetch Volunteer Experiences
+            echo "<h3>Volunteer Experiences</h3>";
+            $volStmt = $pdo->prepare("SELECT * FROM volunteer_experiences WHERE cv_id = ?");
+            $volStmt->execute([$cv_id]);
+            $volunteering = $volStmt->fetchAll();
+
+            if ($volunteering) {
+                foreach ($volunteering as $vol) {
+                    echo "<p>Role: " . htmlspecialchars($vol['role']) . " at " . htmlspecialchars($vol['organization']) . " (" . htmlspecialchars($vol['duration']) . "): " . htmlspecialchars($vol['volunteer_description']) . "</p>";
+                }
+            } else {
+                echo "<p>No volunteer experiences found.</p>";
+            }
+
+            // Fetch Skills
+            echo "<h3>Skills</h3>";
+            $skillStmt = $pdo->prepare("SELECT * FROM skills WHERE cv_id = ?");
+            $skillStmt->execute([$cv_id]);
+            $skills = $skillStmt->fetchAll();
+
+            if ($skills) {
+                foreach ($skills as $skill) {
+                    echo "<p>" . htmlspecialchars($skill['skill_name']) . "</p>";
+                }
+            } else {
+                echo "<p>No skills found.</p>";
+            }
+
+            // Fetch Summary
+            echo "<h3>Professional Summary</h3>";
+            $sumStmt = $pdo->prepare("SELECT * FROM summaries WHERE cv_id = ?");
+            $sumStmt->execute([$cv_id]);
+            $summary = $sumStmt->fetch();
+
+            if ($summary) {
+                echo "<p>" . htmlspecialchars($summary['professional_summary']) . "</p>";
+            } else {
+                echo "<p>No professional summary found.</p>";
+            }
+
+            // Fetch Languages
+            echo "<h3>Languages</h3>";
+            $langStmt = $pdo->prepare("SELECT * FROM languages WHERE cv_id = ?");
+            $langStmt->execute([$cv_id]);
+            $languages = $langStmt->fetchAll();
+
+            if ($languages) {
+                foreach ($languages as $lang) {
+                    echo "<p>" . htmlspecialchars($lang['language']) . " (" . htmlspecialchars($lang['proficiency']) . ")</p>";
+                }
+            } else {
+                echo "<p>No languages found.</p>";
+            }
+
+            // Fetch Hobbies
+            echo "<h3>Hobbies</h3>";
+            $hobbyStmt = $pdo->prepare("SELECT * FROM hobbies WHERE cv_id = ?");
+            $hobbyStmt->execute([$cv_id]);
+            $hobbies = $hobbyStmt->fetchAll();
+
+            if ($hobbies) {
+                foreach ($hobbies as $hobby) {
+                    echo "<p>" . htmlspecialchars($hobby['hobby_name']) . "</p>";
+                }
+            } else {
+                echo "<p>No hobbies found.</p>";
+            }
+
+        } else {
+            echo "<p>No CV found with the provided ID.</p>";
+        }
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+} else {
+    echo "<p>No CV ID provided.</p>";
+}
+?>
+```
+
+### Explanation
+- **Database Connection**: The script includes a connection to the database via `db.php`.
+- **Fetching Data**: It retrieves data from the `cvs` table and joins with other tables (`users`, `certifications`, `education`, `experiences`, `projects`, `volunteer_experiences`, `skills`, `summaries`, `languages`, `hobbies`) using the `cv_id`.
+- **Displaying Data**: It displays each section clearly, handling cases where no data is found.
+- **HTML Escaping**: The `htmlspecialchars()` function is used to prevent XSS attacks by escaping special characters.
+
+### Usage
+You can access this script by providing a `cv_id` in the query string, like so: `yourpage.php?cv_id=1`.
+
+Make sure to adjust the styling and structure according to your application's needs. Let me know if you need further assistance!
+
+
+Sure! Below are PHP scripts for each table that will receive user information from a form and insert it into the respective tables. Each script assumes that you are using a MySQL database and have established a connection to the database.
+
+### Database Connection (db.php)
+First, let's create a common database connection file:
+
+```php
+<?php
+$host = 'localhost'; // Your database host
+$db = 'your_database'; // Your database name
+$user = 'your_username'; // Your database username
+$pass = 'your_password'; // Your database password
+
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    echo "Connection failed: " . $e->getMessage();
+}
+?>
+```
+
+### 1. Insert User Info
+
+```php
+<?php
+include 'db.php';
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $full_name = $_POST['full_name'];
+    $email = $_POST['email'];
+    $phone_number = $_POST['phone_number'];
+    $country = $_POST['country'];
+
+    $stmt = $pdo->prepare("INSERT INTO users (full_name, email, phone_number, country) VALUES (?, ?, ?, ?)");
+    $stmt->execute([$full_name, $email, $phone_number, $country]);
+}
+?>
+```
+
+### 2. Insert CV
+
+```php
+<?php
+include 'db.php';
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $user_id = $_POST['user_id'];
+    $cv_title = $_POST['cv_title'];
+
+    $stmt = $pdo->prepare("INSERT INTO cvs (user_id, cv_title, created_at, updated_at) VALUES (?, ?, NOW(), NOW())");
+    $stmt->execute([$user_id, $cv_title]);
+}
+?>
+```
+
+### 3. Insert Certification
+
+```php
+<?php
+include 'db.php';
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $cv_id = $_POST['cv_id'];
+    $certificate_name = $_POST['certificate_name'];
+    $institution = $_POST['institution'];
+    $date_obtained = $_POST['date_obtained'];
+    $importance_level = $_POST['importance_level'];
+
+    $stmt = $pdo->prepare("INSERT INTO certifications (cv_id, certificate_name, institution, date_obtained, importance_level) VALUES (?, ?, ?, ?, ?)");
+    $stmt->execute([$cv_id, $certificate_name, $institution, $date_obtained, $importance_level]);
+}
+?>
+```
+
+### 4. Insert Education
+
+```php
+<?php
+include 'db.php';
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $cv_id = $_POST['cv_id'];
+    $degree_title = $_POST['degree_title'];
+    $institution = $_POST['institution'];
+    $graduation_year = $_POST['graduation_year'];
+
+    $stmt = $pdo->prepare("INSERT INTO education (cv_id, degree_title, institution, graduation_year) VALUES (?, ?, ?, ?)");
+    $stmt->execute([$cv_id, $degree_title, $institution, $graduation_year]);
+}
+?>
+```
+
+### 5. Insert Experience
+
+```php
+<?php
+include 'db.php';
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $cv_id = $_POST['cv_id'];
+    $company_name = $_POST['company_name'];
+    $duration = $_POST['duration'];
+    $location = $_POST['location'];
+    $job_description = $_POST['job_description'];
+
+    $stmt = $pdo->prepare("INSERT INTO experiences (cv_id, company_name, duration, location, job_description) VALUES (?, ?, ?, ?, ?)");
+    $stmt->execute([$cv_id, $company_name, $duration, $location, $job_description]);
+}
+?>
+```
+
+### 6. Insert Project
+
+```php
+<?php
+include 'db.php';
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $cv_id = $_POST['cv_id'];
+    $project_title = $_POST['project_title'];
+    $organization = $_POST['organization'];
+    $project_duration = $_POST['project_duration'];
+    $project_description = $_POST['project_description'];
+
+    $stmt = $pdo->prepare("INSERT INTO projects (cv_id, project_title, organization, project_duration, project_description) VALUES (?, ?, ?, ?, ?)");
+    $stmt->execute([$cv_id, $project_title, $organization, $project_duration, $project_description]);
+}
+?>
+```
+
+### 7. Insert Volunteer Experience
+
+```php
+<?php
+include 'db.php';
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $cv_id = $_POST['cv_id'];
+    $role = $_POST['role'];
+    $organization = $_POST['organization'];
+    $duration = $_POST['duration'];
+    $location = $_POST['location'];
+    $volunteer_description = $_POST['volunteer_description'];
+
+    $stmt = $pdo->prepare("INSERT INTO volunteer_experiences (cv_id, role, organization, duration, location, volunteer_description) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->execute([$cv_id, $role, $organization, $duration, $location, $volunteer_description]);
+}
+?>
+```
+
+### 8. Insert Skills
+
+```php
+<?php
+include 'db.php';
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $cv_id = $_POST['cv_id'];
+    $skill_name = $_POST['skill_name'];
+
+    $stmt = $pdo->prepare("INSERT INTO skills (cv_id, skill_name) VALUES (?, ?)");
+    $stmt->execute([$cv_id, $skill_name]);
+}
+?>
+```
+
+### 9. Insert Summary
+
+```php
+<?php
+include 'db.php';
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $cv_id = $_POST['cv_id'];
+    $professional_summary = $_POST['professional_summary'];
+
+    $stmt = $pdo->prepare("INSERT INTO summaries (cv_id, professional_summary) VALUES (?, ?)");
+    $stmt->execute([$cv_id, $professional_summary]);
+}
+?>
+```
+
+### 10. Insert Languages
+
+```php
+<?php
+include 'db.php';
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $cv_id = $_POST['cv_id'];
+    $language = $_POST['language'];
+    $proficiency = $_POST['proficiency'];
+
+    $stmt = $pdo->prepare("INSERT INTO languages (cv_id, language, proficiency) VALUES (?, ?, ?)");
+    $stmt->execute([$cv_id, $language, $proficiency]);
+}
+?>
+```
+
+### 11. Insert Hobbies
+
+```php
+<?php
+include 'db.php';
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $cv_id = $_POST['cv_id'];
+    $hobby_name = $_POST['hobby_name'];
+
+    $stmt = $pdo->prepare("INSERT INTO hobbies (cv_id, hobby_name) VALUES (?, ?)");
+    $stmt->execute([$cv_id, $hobby_name]);
+}
+?>
+```
+
+### Form Structure
+To connect the forms with these scripts, ensure your HTML forms contain the necessary input fields with names corresponding to the variables used in the PHP scripts.
+
+### Notes
+- Make sure to validate and sanitize user inputs to protect against SQL injection and other security issues.
+- You might want to handle errors or provide feedback to the user upon successful insertion.
+- Adjust database connection settings and error handling according to your application's requirements.
+
+Let me know if you have any further questions or need additional modifications!
