@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katherine Lopez - Resume</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="template_libary.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+</head>
+<header class="head">
+    <div class="logo">
+     
+     <h3 style="color: whitesmoke; text-transform: uppercase;">Template library</h3>
+    </div>  
+  
+    <div class="mobile-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <nav class="nav-links">
+      <ul>
+          <li><a href="#">Academic</a></li>
+          <li><a href="#templates">Creative</a></li>
+          <li><a href="#features">Professional </a></li>
+          <li><a href="#testimonial">Technical</a></li>
+          <li><a href="#contact">Minimalist</a></li>
+      </ul>
+    </nav>
+  
+   <form action="" class="register">
+      <button>Download</button>
+      <!-- <button>Signup</button> -->
+   </form>
+  </header>
+<body>
+                <div class="resume-container">
+                    <div class="header">
+                        <h1>KATHERINE LOPEZ</h1>
+                        <h3>Area Trainer</h3>
+                        <p>Philadelphia | +91 1231231231 | katherine.lopez@covowl.com | katherine_cvo | Video Resume</p>
+                    </div>
+            
+                    <section class="summary">
+                        <h2>SUMMARY</h2>
+                        <p>
+                            Results-oriented professional with extensive experience in streamlining and managing all aspects of store operations to continually improve sales and customer service outcomes. A profits-driven individual with a proven track record of managing high-value brands, developing store promotional strategies, providing staff and customer training, propelling sales and revenue growth, managing top-producing teams, and achieving challenging corporate goals. 
+                        </p>
+                        <p>
+                            Customer-focused with strong proficiencies in delivering exceptional customer service through analyzing client needs and suggesting the best products in accordance with customer insights to secure repeat business. Demonstrated strong interpersonal and communication skills to build lucrative relationships with management, staff, and customers.
+                        </p>
+                    </section>
+            
+                    <section class="skills">
+                        <h2>SKILLS</h2>
+                        <ul>
+                            <li>Store Operations Management</li>
+                            <li>Territory & Account Management</li>
+                            <li>Area Training & Staff Development</li>
+                            <li>Business Growth Initiatives</li>
+                            <li>Strategic Planning & Execution</li>
+                            <li>Customer Service Management</li>
+                            <li>Sales & Revenue Optimization</li>
+                            <li>Key Relationship Development</li>
+                            <li>Customer Acquisition & Growth</li>
+                        </ul>
+                    </section>
+            
+                    <section class="work-experience">
+                        <h2>WORK EXPERIENCE</h2>
+                        <h3>Marks & Spencer</h3>
+                        <h4>Area Trainer | Aug 2016 - May 2019 | New York</h4>
+                        <ul>
+                            <li>Led the operations of 50 individual stores and collaborated with 50 different store managers in achieving positive results, while ensuring all stores deliver sales and waste targets.</li>
+                            <li>Acted as an Area Trainer for one of the most successful companies in the UK and managed day-to-day assigned operations in an efficient manner.</li>
+                            <li>Performed a broad range of tasks, such as handling paperwork, directing small part orders for each store, managing budgets, and arranging and completing multiple audits in a day.</li>
+                            <li>Elevated company commercial position by representing M&S in different promotional deals and events.</li>
+                            <li>Maximized business performance by planning for success, overseeing stores' single origin conversion rates, and delivering suitable action plans.</li>
+                            <li>Collaborated with multiple branches and management teams to change from more than 200 customer branches.</li>
+                            <li>Provided professional training to different teams for enhancing work productivity.</li>
+                        </ul>
+            
+                        <h3>Matthew Algie</h3>
+                        <h4>Area Trainer | Feb 2015 - Aug 2016 | Boston</h4>
+                        <ul>
+                            <li>Interacted with potential clients by participating in high-profile exhibitions within multiple countries on behalf of the company.</li>
+                            <li>Directed both vocational and classroom training within the food retail sectors, as well as conducted audits, supervised mystery shopping, and managed clientele on a daily basis.</li>
+                            <li>Promoted positive working relationships with peers to enhance business operational efficiency and productivity.</li>
+                            <li>Offered the best possible training by designing structured training plans for individual clients.</li>
+                            <li>Handled high-end demands to meet a number of tasks, including dealing with private clientele from the company.</li>
+                            <li>Supervised assignment of over 200 customer branches and developed relationships to optimize customer satisfaction.</li>
+                        </ul>
+                    </section>
+            
+                    <section class="education">
+                        <h2>EDUCATION</h2>
+                        <p>Bachelor's Degree in Business | New York University | 2012</p>
+                    </section>
+               
+            </body>
+            </html>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <button id="downloadPdf">Download PDF</button>
+            
+            </div>
+
+
+
+   
+
+<script>
+    document.getElementById('downloadPdf').addEventListener('click', function () {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        doc.html(document.body, {
+            callback: function (pdf) {
+                pdf.save('resume.pdf');
+            },
+            x: 10,
+            y: 10
+        });
+    });
+</script>
+
+
